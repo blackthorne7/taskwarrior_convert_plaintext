@@ -6,34 +6,22 @@
 // rename urgency - priority
 //
 
-
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
-void task_add_cmd(string, char, string); // function declaration
-string fileLocation();
+// function declarations
+void taskAddCmd(string, char, string); // runs task add
+string fileLocation(); // returns todo file location
+int vectorOrFile(); // returns whether user wants vector or file
+void vectorMethod(); // vector method
+void fileMethod(); // file method
+void sedDelete(); // runs sed delete on file line
 
-string fileLocation() {
-	string location;
-	cout << "Please enter the todo file location: ";
-	getline(cin, location);
-	
-	return location;
-}
-vectorOrFile()
-
-int main() {
-
-	int vectorOrFile;
-	string location; // file location
-
-	cout << "This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
-	cin >> vectorOrFile;
-
-	if 
-	ifstream fin(location); // opens text file containing tasks to be processed and added
+void fileMethod() {
+	ifstream fin(fileLocation()); // opens text file containing tasks to be processed and added
 
 	string line;
 	string storeLine;
@@ -67,7 +55,7 @@ int main() {
 					exit(1);
 				}
 
-				task_add_cmd(storeLine, urgency_char, due_date);
+				taskAddCmd(storeLine, urgency_char, due_date);
 
 				break;
 
@@ -83,24 +71,52 @@ int main() {
 	fin.close();
 
 	cout << "\nTERMINAL: file processing complete\n\n";
+
 }
 
-void task_add_cmd(string storeLine, char urgency_char, string due_date) {
 
-	string str = "echo task add priority:" ;
+int main() {
+
+	int whichProcess = vectorOrFile();
+	if (whichProcess == 1)
+		void vectorMethod();
+	else if (whichProcess == 2)
+		void fileMethod();
+}
+
+string fileLocation() {
+	string location;
+	cout << "Please enter the todo file location: ";
+	getline(cin, location);
+	
+	return location;
+}
+
+int vectorOrFile() {
+	int input;
+
+	cout << "This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
+	cin >> input;
+	return input;
+}
+
+void taskAddCmd(string storeLine, char urgency_char, string due_date) {
+
+	string str = "task add priority:" ;
 	str += urgency_char;
 	str += " \"" + storeLine + "\" " + "due:" + due_date;
 
 	const char* command = str.c_str();
 	cout << "echo " << str << endl;
-	system(command);
-	
+	//system(command);
+	cout << "\nTERMINAL: task added\n";
+}
+
+void sedDelete() {
 	string sed = "echo sed -i 1d todo.txt";
 	const char* sed_del = sed.c_str();
-	system(sed_del);
+	//system(sed_del);
 	cout << endl << sed << endl;
-	
-	cout << "\nTERMINAL: task added\n";
 	cout << "TERMINAL: line deleted\n\n";
 }
 
