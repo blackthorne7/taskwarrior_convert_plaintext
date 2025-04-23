@@ -1,7 +1,11 @@
-// This is a text processing program that reads a list of tasks to do from a plaintext file, and outputs them as shell commands to add them to 'taskwarrior', a command-line task management program. it assumes each task in the textfile is in a "string" format, seperated only by lines. it prompts the user for 'Urgency' and 'due date', which are two tags. the shell command that the program outputs is in the following format: 
-// 'task add priority:$PRIORITY $TASK_NAME due:$DUE_DATE'
-//
 // this version of the program reads in lines from the file and deletes each line from the file after it executes that as a "task add"
+
+// todo: finish commenting
+// merge file and vector, ask user if they want to delete file or not
+// line storeLine
+// rename urgency - priority
+//
+
 
 #include <iostream>
 #include <fstream>
@@ -11,7 +15,11 @@ using namespace std;
 void task_add_cmd(string, char, string); // function declaration
 
 int main() {
-	ifstream fin("todo.txt"); // opens text file containing tasks to be processed and added
+
+	string location; // file location
+	cout << "Please enter the todo file location: ";
+	getline(cin, location);
+	ifstream fin(location); // opens text file containing tasks to be processed and added
 
 	string line;
 	string storeLine;
@@ -26,7 +34,7 @@ int main() {
 
 		cout << storeLine << endl;
 
-		cout << "QUERY: enter urgency (H, M, L, Q for quit): "; // 
+		cout << "QUERY: enter urgency (H, M, L, , Q for quit): "; // 
 
 		getline(cin, urgency_str);
 
@@ -65,7 +73,7 @@ int main() {
 
 void task_add_cmd(string storeLine, char urgency_char, string due_date) {
 
-	string str = "task add priority:" ;
+	string str = "echo task add priority:" ;
 	str += urgency_char;
 	str += " \"" + storeLine + "\" " + "due:" + due_date;
 
@@ -73,7 +81,7 @@ void task_add_cmd(string storeLine, char urgency_char, string due_date) {
 	cout << "echo " << str << endl;
 	system(command);
 	
-	string sed = "sed -i 1d todo.txt";
+	string sed = "echo sed -i 1d todo.txt";
 	const char* sed_del = sed.c_str();
 	system(sed_del);
 	cout << endl << sed << endl;
