@@ -13,12 +13,26 @@
 using namespace std;
 
 void task_add_cmd(string, char, string); // function declaration
+string fileLocation();
+
+string fileLocation() {
+	string location;
+	cout << "Please enter the todo file location: ";
+	getline(cin, location);
+	
+	return location;
+}
+vectorOrFile()
 
 int main() {
 
+	int vectorOrFile;
 	string location; // file location
-	cout << "Please enter the todo file location: ";
-	getline(cin, location);
+
+	cout << "This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
+	cin >> vectorOrFile;
+
+	if 
 	ifstream fin(location); // opens text file containing tasks to be processed and added
 
 	string line;
