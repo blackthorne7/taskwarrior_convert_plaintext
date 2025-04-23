@@ -18,6 +18,8 @@ int vectorOrFile(); // returns whether user wants vector or file
 void vectorMethod(); // vector method
 void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
+void makeFileBackup(string);
+
 const string FILE_LOCATION = getFileLocation();
 
 int main() {
@@ -29,13 +31,63 @@ int main() {
 		void fileMethod();
 }
 
+void vectorMethod() {
+	ifstream fin(FILE_LOCATION);
 
-void makeFileBackup(string);
+	vector<string> taskList;
 
+	string line;
+	string urgency_str;
+	char urgency_char;
+	string due_date;
+
+	while (getline(fin, line)) {
+		taskList.push_back(line);
+	}
+	
+	cout << "\nTERMINAL: tasks stored to vector\n\n";
+	
+	for (int i = 0; i < taskList.size(); i++) {
+		cout << taskList[i] << endl;
+
+		cout << "QUERY: enter urgency (H, M, L, Q for quit): ";
+		
+		getline(cin, urgency_str);
+		
+		urgency_char = urgency_str[0];
+		urgency_char = toupper(urgency_char);
+
+		switch (urgency_char) {
+			case 'H':
+			case 'M':
+			case 'L':
+				cout << "TRUE";
+				cout << "QUERY: enter due date: ";
+				getline(cin, due_date);
+				
+				if (due_date == "Q" || due_date == "q") {
+					exit(1);
+				}
+
+				task_add_cmd(taskList, i, urgency_char, due_date);
+				
+				break;
+
+			case 'Q': 
+				cout << "FALSE";	
+				exit(1);
+
+		}
+	}
+
+	cout << "TERMINAL: task adding complete";
+
+	fin.close();
+}
 
 void fileMethod() {
 	string location = getFileLocation();
-	makeFileBackup(string location);
+	makeFileBackup(location);
 	ifstream fin(location); // opens text file containing tasks to be processed and added
 
 	string line;
