@@ -4,7 +4,6 @@
 // merge file and vector, ask user if they want to delete file or not
 // line storeLine
 // rename urgency - priority
-//
 
 #include <iostream>
 #include <fstream>
@@ -14,14 +13,30 @@ using namespace std;
 
 // function declarations
 void taskAddCmd(string, char, string); // runs task add
-string fileLocation(); // returns todo file location
+string getFileLocation(); // returns todo file location
 int vectorOrFile(); // returns whether user wants vector or file
 void vectorMethod(); // vector method
 void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
+const string FILE_LOCATION = getFileLocation();
+
+int main() {
+
+	int whichProcess = vectorOrFile();
+	if (whichProcess == 1)
+		void vectorMethod();
+	else if (whichProcess == 2)
+		void fileMethod();
+}
+
+
+void makeFileBackup(string);
+
 
 void fileMethod() {
-	ifstream fin(fileLocation()); // opens text file containing tasks to be processed and added
+	string location = getFileLocation();
+	makeFileBackup(string location);
+	ifstream fin(location); // opens text file containing tasks to be processed and added
 
 	string line;
 	string storeLine;
@@ -75,16 +90,8 @@ void fileMethod() {
 }
 
 
-int main() {
 
-	int whichProcess = vectorOrFile();
-	if (whichProcess == 1)
-		void vectorMethod();
-	else if (whichProcess == 2)
-		void fileMethod();
-}
-
-string fileLocation() {
+string getFileLocation() {
 	string location;
 	cout << "Please enter the todo file location: ";
 	getline(cin, location);
@@ -112,6 +119,11 @@ void taskAddCmd(string storeLine, char urgency_char, string due_date) {
 	cout << "\nTERMINAL: task added\n";
 }
 
+void makeFileBackup(string location) {
+	cout << "\nTERMINAL: making file backup\n";
+	string backupLocation = location + ".bak";
+	string copyFile = "cp " + location + " " + backupLocation; 
+}
 void sedDelete() {
 	string sed = "echo sed -i 1d todo.txt";
 	const char* sed_del = sed.c_str();
