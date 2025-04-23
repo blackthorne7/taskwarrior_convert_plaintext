@@ -1,0 +1,2 @@
+This is a text processing program that reads a list of tasks to do from a plaintext file, and outputs them as shell commands to add them to 'taskwarrior', a command-line task management program. it assumes each task in the textfile is in a "string" format, seperated only by lines. it prompts the user for 'Urgency' and 'due date', which are two tags. the shell command that the program outputs is in the following format: 
+'task add priority:$PRIORITY $TASK_NAME due:$DUE_DATE'
