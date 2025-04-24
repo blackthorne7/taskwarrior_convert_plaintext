@@ -19,7 +19,7 @@ void vectorMethod(); // vector method
 void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
 void makeFileBackup(string);
-
+void urgencySwitch(char, string, string);
 const string FILE_LOCATION = getFileLocation();
 
 int main() {
@@ -41,19 +41,20 @@ void vectorMethod() {
 	char urgency_char;
 	string due_date;
 
-	while (getline(fin, line)) {
+	// fills vector with tasks from file
+	while (getline(fin, line)) { 
 		taskList.push_back(line);
 	}
-	
-	cout << "\nTERMINAL: tasks stored to vector\n\n";
-	
-	for (int i = 0; i < taskList.size(); i++) {
-		cout << taskList[i] << endl;
 
+	cout << "\nTERMINAL: tasks stored to vector\n\n";
+
+	for (int i = 0; i < taskList.size(); i++) {
+		string storeLine = taskList[i];
+		cout << storeLine << endl;
 		cout << "QUERY: enter urgency (H, M, L, Q for quit): ";
-		
+
 		getline(cin, urgency_str);
-		
+
 		urgency_char = urgency_str[0];
 		urgency_char = toupper(urgency_char);
 
@@ -64,13 +65,13 @@ void vectorMethod() {
 				cout << "TRUE";
 				cout << "QUERY: enter due date: ";
 				getline(cin, due_date);
-				
+
 				if (due_date == "Q" || due_date == "q") {
 					exit(1);
 				}
 
-				task_add_cmd(taskList, i, urgency_char, due_date);
-				
+				taskAddCmd(storeLine, urgency_char, due_date);
+
 				break;
 
 			case 'Q': 
@@ -97,7 +98,7 @@ void fileMethod() {
 	string due_date;
 
 	cout << "\nTERMINAL: file processing started\n\n";
-	
+
 	while (getline(fin, line)) { // reads the next line in the file
 		storeLine = line;
 
@@ -110,27 +111,32 @@ void fileMethod() {
 		urgency_char = urgency_str[0]; 
 		urgency_char = toupper(urgency_char);
 
-		switch (urgency_char) {
-			case 'H':
-			case 'M':
-			case 'L':
-				cout << "QUERY: enter due date: ";
-				getline(cin, due_date);
-				cout << endl;
+		urgencySwitch(urgency_char, due_date, storeLine);
 
-				if (due_date == "Q" || due_date == "q") {
-					exit(1);
-				}
 
-				taskAddCmd(storeLine, urgency_char, due_date);
 
-				break;
 
-			case 'Q': 
-				cout << "\n\nABORTING\n";	
-				exit(1);
 
-		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 
 	cout << "\nTERMINAL: task adding complete\n";
@@ -147,7 +153,7 @@ string getFileLocation() {
 	string location;
 	cout << "Please enter the todo file location: ";
 	getline(cin, location);
-	
+
 	return location;
 }
 
@@ -171,6 +177,16 @@ void taskAddCmd(string storeLine, char urgency_char, string due_date) {
 	cout << "\nTERMINAL: task added\n";
 }
 
+//void task_add_cmd(vector<string> taskList, int i, char urgency_char, string due_date) {
+//
+//	string str = "echo task add priority:" + urgency_char;
+//	str += " " + taskList[i] + " " + "due:" + due_date;
+//	const char* command = str.c_str();
+//	system(command);
+//	cout << "\nTERMINAL: task added to taskwarrior\n\n";
+//}
+
+
 void makeFileBackup(string location) {
 	cout << "\nTERMINAL: making file backup\n";
 	string backupLocation = location + ".bak";
@@ -184,3 +200,27 @@ void sedDelete() {
 	cout << "TERMINAL: line deleted\n\n";
 }
 
+void urgencySwitch(char urgency_char, string due_date, string storeLine) {
+
+	switch (urgency_char) {
+		case 'H':
+		case 'M':
+		case 'L':
+			cout << "QUERY: enter due date: ";
+			getline(cin, due_date);
+			cout << endl;
+
+			if (due_date == "Q" || due_date == "q") {
+				exit(1);
+			}
+
+			taskAddCmd(storeLine, urgency_char, due_date);
+
+			break;
+
+		case 'Q': 
+			cout << "\n\nABORTING\n";	
+			exit(1);
+
+	}
+}
