@@ -37,7 +37,6 @@ void vectorMethod() {
 	ifstream fin(FILE_LOCATION);
 
 	vector<string> taskList;
-
 	string line;
 	string due_date;
 
@@ -59,7 +58,6 @@ void vectorMethod() {
 	fin.close();
 }
 
-
 void fileMethod() {
 	string location = getFileLocation();
 	makeFileBackup(location);
@@ -67,8 +65,6 @@ void fileMethod() {
 
 	string line;
 	string storeLine;
-	string urgency_str;
-	char urgency_char;
 	string due_date;
 
 	cout << "\nTERMINAL: file processing started\n\n";
@@ -76,27 +72,13 @@ void fileMethod() {
 	while (getline(fin, line)) { // reads the next line in the file
 		storeLine = line;
 
-
-
-
-
-
-
-
-
-
 		urgencySwitch(due_date, storeLine);
 	}
 
 	cout << "\nTERMINAL: task adding complete\n";
-
 	fin.close();
-
 	cout << "\nTERMINAL: file processing complete\n\n";
-
 }
-
-
 
 string getFileLocation() {
 	string location;
