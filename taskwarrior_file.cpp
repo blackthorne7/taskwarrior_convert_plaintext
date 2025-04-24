@@ -19,7 +19,7 @@ void vectorMethod(); // vector method
 void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
 void makeFileBackup(string);
-void urgencySwitch(char, string, string);
+void urgencySwitch(string, string);
 //const string FILE_LOCATION = getFileLocation();
 const string FILE_LOCATION = "./tasks.txt";
 
@@ -39,8 +39,6 @@ void vectorMethod() {
 	vector<string> taskList;
 
 	string line;
-	string urgency_str;
-	char urgency_char;
 	string due_date;
 
 	// fills vector with tasks from file
@@ -52,13 +50,8 @@ void vectorMethod() {
 
 	for (int i = 0; i < taskList.size(); i++) {
 		string storeLine = taskList[i];
-		cout << storeLine << endl;
-		cout << "QUERY: enter urgency (H, M, L, Q for quit): ";
-		getline(cin, urgency_str);
-
-		urgency_char = urgency_str[0];
-		urgency_char = toupper(urgency_char);
-		urgencySwitch(urgency_char, due_date, storeLine);
+		
+		urgencySwitch(due_date, storeLine);
 	}
 
 	cout << "TERMINAL: task adding complete";
@@ -83,16 +76,16 @@ void fileMethod() {
 	while (getline(fin, line)) { // reads the next line in the file
 		storeLine = line;
 
-		cout << storeLine << endl;
 
-		cout << "QUERY: enter urgency (H, M, L, , Q for quit): "; // 
 
-		getline(cin, urgency_str);
 
-		urgency_char = urgency_str[0]; 
-		urgency_char = toupper(urgency_char);
 
-		urgencySwitch(urgency_char, due_date, storeLine);
+
+
+
+
+
+		urgencySwitch(due_date, storeLine);
 	}
 
 	cout << "\nTERMINAL: task adding complete\n";
@@ -157,7 +150,18 @@ void sedDelete() {
 	cout << "TERMINAL: line deleted\n\n";
 }
 
-void urgencySwitch(char urgency_char, string due_date, string storeLine) {
+void urgencySwitch(string due_date, string storeLine) {
+	string urgency_str;
+	char urgency_char;
+	
+	cout << storeLine << endl;
+	
+	cout << "QUERY: enter urgency (H, M, L, , Q for quit): "; // 
+	getline(cin, urgency_str);
+
+	urgency_char = urgency_str[0]; 
+	urgency_char = toupper(urgency_char);
+
 	switch (urgency_char) {
 		case 'H':
 		case 'M':
@@ -171,7 +175,7 @@ void urgencySwitch(char urgency_char, string due_date, string storeLine) {
 			}
 			taskAddCmd(storeLine, urgency_char, due_date);
 			break;
-
+		
 		case 'Q': 
 			cout << "\n\nABORTING\n";	
 			exit(1);
