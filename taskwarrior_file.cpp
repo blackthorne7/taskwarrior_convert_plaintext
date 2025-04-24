@@ -1,8 +1,4 @@
-// this version of the program reads in lines from the file and deletes each line from the file after it executes that as a "task add"
-
 // todo: finish commenting
-// merge file and vector, ask user if they want to delete file or not
-// line storeLine
 // rename urgency - priority
 
 #include <iostream>
@@ -19,7 +15,7 @@ void vectorMethod(); // vector method
 void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
 void makeFileBackup(string);
-void urgencySwitch(string, string);
+void getUrgency(string, string);
 //const string FILE_LOCATION = getFileLocation();
 const string FILE_LOCATION = "./tasks.txt";
 
@@ -50,7 +46,7 @@ void vectorMethod() {
 	for (int i = 0; i < taskList.size(); i++) {
 		string storeLine = taskList[i];
 		
-		urgencySwitch(due_date, storeLine);
+		getUrgency(due_date, storeLine);
 	}
 
 	cout << "TERMINAL: task adding complete";
@@ -72,7 +68,7 @@ void fileMethod() {
 	while (getline(fin, line)) { // reads the next line in the file
 		storeLine = line;
 
-		urgencySwitch(due_date, storeLine);
+		getUrgency(due_date, storeLine);
 	}
 
 	cout << "\nTERMINAL: task adding complete\n";
@@ -91,48 +87,13 @@ string getFileLocation() {
 int vectorOrFile() {
 	int input;
 
-	cout << "This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
+	cout << "\nProcess 1 (vector method) or Process 2 (file method): ";
 	cin >> input;
 	cin.ignore();
 	return input;
 }
 
-void taskAddCmd(string storeLine, char urgency_char, string due_date) {
-
-	string str = "task add priority:" ;
-	str += urgency_char;
-	str += " \"" + storeLine + "\" " + "due:" + due_date;
-
-	const char* command = str.c_str();
-	cout << "echo " << str << endl;
-	//system(command);
-	cout << "\nTERMINAL: task added\n";
-}
-
-//void task_add_cmd(vector<string> taskList, int i, char urgency_char, string due_date) {
-//
-//	string str = "echo task add priority:" + urgency_char;
-//	str += " " + taskList[i] + " " + "due:" + due_date;
-//	const char* command = str.c_str();
-//	system(command);
-//	cout << "\nTERMINAL: task added to taskwarrior\n\n";
-//}
-
-
-void makeFileBackup(string location) {
-	cout << "\nTERMINAL: making file backup\n";
-	string backupLocation = location + ".bak";
-	string copyFile = "cp " + location + " " + backupLocation; 
-}
-void sedDelete() {
-	string sed = "echo sed -i 1d todo.txt";
-	const char* sed_del = sed.c_str();
-	//system(sed_del);
-	cout << endl << sed << endl;
-	cout << "TERMINAL: line deleted\n\n";
-}
-
-void urgencySwitch(string due_date, string storeLine) {
+void getUrgency(string due_date, string storeLine) {
 	string urgency_str;
 	char urgency_char;
 	
@@ -163,3 +124,32 @@ void urgencySwitch(string due_date, string storeLine) {
 			exit(1);
 	}
 }
+
+
+void makeFileBackup(string location) {
+	cout << "\nTERMINAL: making file backup\n";
+	string backupLocation = location + ".bak";
+	string copyFile = "cp " + location + " " + backupLocation; 
+	//system(copyFile);
+}
+
+void taskAddCmd(string storeLine, char urgency_char, string due_date) {
+
+	string str = "task add priority:" ;
+	str += urgency_char;
+	str += " \"" + storeLine + "\" " + "due:" + due_date;
+
+	const char* command = str.c_str();
+	cout << "echo " << str << endl;
+	//system(command);
+	cout << "\nTERMINAL: task added\n";
+}
+
+void sedDelete() {
+	string sed = "echo sed -i 1d " + FILE_LOCATION;
+	const char* sed_del = sed.c_str();
+	//system(sed_del);
+	cout << endl << sed << endl;
+	cout << "TERMINAL: line deleted\n\n";
+}
+

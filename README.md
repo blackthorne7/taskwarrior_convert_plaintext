@@ -1,2 +1,4 @@
 This is a text processing program that reads a list of tasks to do from a plaintext file, and outputs them as shell commands to add them to 'taskwarrior', a command-line task management program. it assumes each task in the textfile is in a "string" format, seperated only by lines. it prompts the user for 'Urgency' and 'due date', which are two tags. the shell command that the program outputs is in the following format: 
 'task add priority:$PRIORITY $TASK_NAME due:$DUE_DATE'
+
+This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
