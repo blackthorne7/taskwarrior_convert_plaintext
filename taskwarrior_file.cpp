@@ -20,15 +20,17 @@ void fileMethod(); // file method
 void sedDelete(); // runs sed delete on file line
 void makeFileBackup(string);
 void urgencySwitch(char, string, string);
-const string FILE_LOCATION = getFileLocation();
+//const string FILE_LOCATION = getFileLocation();
+const string FILE_LOCATION = "./tasks.txt";
 
 int main() {
 
 	int whichProcess = vectorOrFile();
-	if (whichProcess == 1)
-		void vectorMethod();
+	if (whichProcess == 1) {
+		vectorMethod();
+	}
 	else if (whichProcess == 2)
-		void fileMethod();
+		fileMethod();
 }
 
 void vectorMethod() {
@@ -52,39 +54,18 @@ void vectorMethod() {
 		string storeLine = taskList[i];
 		cout << storeLine << endl;
 		cout << "QUERY: enter urgency (H, M, L, Q for quit): ";
-
 		getline(cin, urgency_str);
 
 		urgency_char = urgency_str[0];
 		urgency_char = toupper(urgency_char);
-
-		switch (urgency_char) {
-			case 'H':
-			case 'M':
-			case 'L':
-				cout << "TRUE";
-				cout << "QUERY: enter due date: ";
-				getline(cin, due_date);
-
-				if (due_date == "Q" || due_date == "q") {
-					exit(1);
-				}
-
-				taskAddCmd(storeLine, urgency_char, due_date);
-
-				break;
-
-			case 'Q': 
-				cout << "FALSE";	
-				exit(1);
-
-		}
+		urgencySwitch(urgency_char, due_date, storeLine);
 	}
 
 	cout << "TERMINAL: task adding complete";
 
 	fin.close();
 }
+
 
 void fileMethod() {
 	string location = getFileLocation();
@@ -112,31 +93,6 @@ void fileMethod() {
 		urgency_char = toupper(urgency_char);
 
 		urgencySwitch(urgency_char, due_date, storeLine);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	}
 
 	cout << "\nTERMINAL: task adding complete\n";
@@ -162,6 +118,7 @@ int vectorOrFile() {
 
 	cout << "This program has two methods of file processing.\nProcess 1: read-only - the program will read your todo file, and prompt you. No changes will be made to the file - however, if you quit the program without completing processing, the program will not record where you left off.\n Process 2: write - the program will create a backup of your file, then delete each line from your todo file as it processes it.\n Enter 1 or 2: ";
 	cin >> input;
+	cin.ignore();
 	return input;
 }
 
@@ -201,7 +158,6 @@ void sedDelete() {
 }
 
 void urgencySwitch(char urgency_char, string due_date, string storeLine) {
-
 	switch (urgency_char) {
 		case 'H':
 		case 'M':
@@ -213,14 +169,11 @@ void urgencySwitch(char urgency_char, string due_date, string storeLine) {
 			if (due_date == "Q" || due_date == "q") {
 				exit(1);
 			}
-
 			taskAddCmd(storeLine, urgency_char, due_date);
-
 			break;
 
 		case 'Q': 
 			cout << "\n\nABORTING\n";	
 			exit(1);
-
 	}
 }
